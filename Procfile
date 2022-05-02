@@ -1,0 +1,1 @@
+worker: python3 sunny_sunday_bot.py
