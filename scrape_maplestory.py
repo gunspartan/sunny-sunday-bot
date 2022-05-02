@@ -13,8 +13,9 @@ def getSunnySundays(patchNotesURL):
   return sunnySundayList
 
 def formatSunnySundays(sunnySundayArray):
-  allEvents = {}
+  allEvents = []
   for sundayEvent in sunnySundayArray:
+    event = {}
     eventTitle = sundayEvent.strong
     if eventTitle is not None:
       eventTitle = eventTitle.get_text()
@@ -22,7 +23,9 @@ def formatSunnySundays(sunnySundayArray):
     if eventDescription is not None:
       eventDescription = eventDescription.get_text()
     if eventTitle and eventDescription:
-      allEvents[eventTitle] = eventDescription
+      event["title"] = eventTitle
+      event["description"] = eventDescription
+      allEvents.append(event)
   return allEvents
 
 def exportJSON(sunnySundaysObject):
@@ -31,7 +34,7 @@ def exportJSON(sunnySundaysObject):
   with open('sunny_sunday.json', 'w') as f:
       json.dump(sunnySundaysObject, f)
 
-PATCH_URL = 'https://maplestory.nexon.net/news/73909/updated-april-27-v-232-blooming-forest-patch-notes'
-myList = getSunnySundays(PATCH_URL)
-myEvents = formatSunnySundays(myList)
-exportJSON(myEvents)
+# PATCH_URL = 'https://maplestory.nexon.net/news/73909/updated-april-27-v-232-blooming-forest-patch-notes'
+# myList = getSunnySundays(PATCH_URL)
+# myEvents = formatSunnySundays(myList)
+# exportJSON(myEvents)
