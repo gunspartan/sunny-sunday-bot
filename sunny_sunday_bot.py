@@ -1,3 +1,4 @@
+
 import interactions
 import re
 from dotenv import load_dotenv
@@ -7,12 +8,13 @@ from scrape_maplestory import formatSunnySundays, getSunnySundays, exportJSON
 
 load_dotenv()
 discord_token = os.getenv("DISCORD_TOKEN")
+channels = int(os.getenv("CHANNEL_IDS"))
 bot = interactions.Client(token=discord_token)
 
 @bot.command(
   name="sunny_sundays",
   description="Gets the Sunny Sundays from the Patch notes",
-  scope=132737989326536705,
+  scope=channels,
   options = [
     interactions.Option(
       name="text",
@@ -34,7 +36,7 @@ async def my_first_command(ctx: interactions.CommandContext, text: str):
   for event in sunnyEvents:
     title = event['title']
     description = event['description']
-    message = title + "\n" + description
+    message = title + description
     await ctx.send(message)
 
 
