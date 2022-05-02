@@ -1,20 +1,17 @@
-
 import interactions
 import re
 from dotenv import load_dotenv
 import os
-from scrape_maplestory import formatSunnySundays, getSunnySundays, exportJSON
+from scrape_maplestory import formatSunnySundays, getSunnySundays
 
 
 load_dotenv()
 discord_token = os.getenv("DISCORD_TOKEN")
-channels = int(os.getenv("CHANNEL_IDS"))
-bot = interactions.Client(token=discord_token)
 
+bot = interactions.Client(token=discord_token)
 @bot.command(
   name="sunny_sundays",
   description="Gets the Sunny Sundays from the Patch notes",
-  scope=channels,
   options = [
     interactions.Option(
       name="text",
@@ -31,13 +28,22 @@ async def my_first_command(ctx: interactions.CommandContext, text: str):
   if (not valid_url):
     await ctx.send("Please enter the URL to the Maplestory Patch Notes.")
     return
-  sunnyList = getSunnySundays(text)
-  sunnyEvents = formatSunnySundays(sunnyList)
-  for event in sunnyEvents:
-    title = event['title']
-    description = event['description']
-    message = title + description
-    await ctx.send(message)
+  else:
+    sunnyList = getSunnySundays(text)
+    sunnyEvents = formatSunnySundays(sunnyList)
+    eventEmbeds = []
+    for event in sunnyEvents:
+      eventTitle = event['title']
+      eventDescription = event['description']
+      embedMessage = interactions.Embed(
+        title=eventTitle,
+        description=eventDescription,
+      )
+      eventEmbeds.append(embedMessage)
+
+    await ctx.send(
+      embeds=eventEmbeds,
+    )
 
 
 bot.start()
